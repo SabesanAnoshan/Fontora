@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fontora — Unicode Font Generator</title>
+  <meta name="description" content="Generate stylish Unicode fonts instantly. Copy and paste to Instagram, TikTok, Discord, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background-color: #ffffff;
+      color: #1a1a1a;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .page-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ============================================================
+       HEADER / NAV
+    ============================================================ */
+    header {
+      border-bottom: 1px solid #e8e8e8;
+      padding: 20px 0;
+    }
+
+    .header-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: 22px;
+      color: #1a1a1a;
+      letter-spacing: -0.3px;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: #3b5bdb;
+    }
+
+    .header-tag {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      padding: 72px 0 56px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #3b5bdb;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-size: clamp(36px, 6vw, 54px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: #666;
+      max-width: 460px;
+      margin: 0 auto;
+      font-weight: 300;
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       INPUT SECTION
+    ============================================================ */
+    .input-section {
+      padding-bottom: 8px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 10px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .main-input {
+      width: 100%;
+      padding: 16px 52px 16px 20px;
+      font-size: 17px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      color: #1a1a1a;
+      background: #ffffff;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      letter-spacing: 0.1px;
+    }
+
+    .main-input::placeholder {
+      color: #bbb;
+    }
+
+    .main-input:focus {
+      border-color: #3b5bdb;
+      box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.08);
+    }
+
+    .input-clear {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #bbb;
+      font-size: 18px;
+      line-height: 1;
+      padding: 4px;
+      display: none;
+      transition: color 0.2s;
+    }
+
+    .input-clear:hover {
+      color: #666;
+    }
+
+    .input-clear.visible {
+      display: block;
+    }
+
+    /* ============================================================
+       FILTER TABS
+    ============================================================ */
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      background: #f5f5f5;
+      border: 1px solid transparent;
+      border-radius: 20px;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      letter-spacing: 0.2px;
+    }
+
+    .filter-btn:hover {
+      background: #ebebeb;
+      color: #1a1a1a;
+    }
+
+    .filter-btn.active {
+      background: #1a1a1a;
+      color: #ffffff;
+      border-color: #1a1a1a;
+    }
+
+    /* ============================================================
+       RESULTS HEADER
+    ============================================================ */
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 0 16px;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    .results-title {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #aaa;
+    }
+
+    .results-count {
+      font-size: 12px;
+      color: #bbb;
+    }
+
+    /* ============================================================
+       FONT CARDS GRID
+    ============================================================ */
+    .fonts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .font-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.15s ease;
+      cursor: default;
+    }
+
+    .font-card:last-child {
+      border-bottom: none;
+    }
+
+    .font-card-left {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .font-style-name {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 6px;
+    }
+
+    .font-output {
+      font-size: 20px;
+      color: #1a1a1a;
+      line-height: 1.3;
+      word-break: break-word;
+      transition: color 0.2s;
+    }
+
+    .font-card-right {
+      flex-shrink: 0;
+    }
+
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      letter-spacing: 0.3px;
+      background: #ffffff;
+      color: #444;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      background: #f7f7f7;
+      border-color: #bbb;
+      color: #1a1a1a;
+    }
+
+    .copy-btn.copied {
+      background: #f0faf3;
+      border-color: #4caf7d;
+      color: #2e7d52;
+    }
+
+    .copy-btn svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       EMPTY / PLACEHOLDER STATE
+    ============================================================ */
+    .empty-state {
+      text-align: center;
+      padding: 64px 0 48px;
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+      opacity: 0.25;
+    }
+
+    .empty-text {
+      font-size: 15px;
+      color: #bbb;
+      font-weight: 300;
+    }
+
+    /* ============================================================
+       PLATFORMS STRIP
+    ============================================================ */
+    .platforms-strip {
+      padding: 40px 0 0;
+      text-align: center;
+    }
+
+    .platforms-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #ccc;
+      margin-bottom: 14px;
+    }
+
+    .platforms-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .platform-chip {
+      font-size: 12px;
+      color: #999;
+      padding: 5px 12px;
+      border: 1px solid #e8e8e8;
+      border-radius: 16px;
+      background: #fafafa;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      margin-top: 64px;
+      border-top: 1px solid #e8e8e8;
+      padding: 28px 0;
+    }
+
+    .footer-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: #bbb;
+      font-weight: 300;
+    }
+
+    .footer-copy strong {
+      color: #999;
+      font-weight: 500;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: #bbb;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #1a1a1a;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 600px) {
+      .hero {
+        padding: 48px 0 40px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero p {
+        font-size: 15px;
+      }
+
+      .font-output {
+        font-size: 17px;
+      }
+
+      .copy-btn span {
+        display: none;
+      }
+
+      .copy-btn {
+        padding: 8px 10px;
+      }
+
+      .font-card {
+        padding: 16px 0;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .page-wrap {
+        padding: 0 16px;
+      }
+
+      .header-inner {
+        padding: 0 16px;
+      }
+
+      .footer-inner {
+        padding: 0 16px;
+      }
+    }
+
+    /* ============================================================
+       ANIMATIONS
+    ============================================================ */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .font-card {
+      animation: fadeIn 0.25s ease both;
+    }
+
+    .font-card:nth-child(1)  { animation-delay: 0.00s; }
+    .font-card:nth-child(2)  { animation-delay: 0.03s; }
+    .font-card:nth-child(3)  { animation-delay: 0.06s; }
+    .font-card:nth-child(4)  { animation-delay: 0.09s; }
+    .font-card:nth-child(5)  { animation-delay: 0.12s; }
+    .font-card:nth-child(6)  { animation-delay: 0.15s; }
+    .font-card:nth-child(7)  { animation-delay: 0.18s; }
+    .font-card:nth-child(8)  { animation-delay: 0.21s; }
+    .font-card:nth-child(9)  { animation-delay: 0.24s; }
+    .font-card:nth-child(10) { animation-delay: 0.27s; }
+    .font-card:nth-child(11) { animation-delay: 0.30s; }
+    .font-card:nth-child(12) { animation-delay: 0.33s; }
+    .font-card:nth-child(13) { animation-delay: 0.36s; }
+    .font-card:nth-child(14) { animation-delay: 0.39s; }
+    .font-card:nth-child(15) { animation-delay: 0.42s; }
+    .font-card:nth-child(16) { animation-delay: 0.45s; }
+    .font-card:nth-child(17) { animation-delay: 0.48s; }
+    .font-card:nth-child(18) { animation-delay: 0.51s; }
+    .font-card:nth-child(19) { animation-delay: 0.54s; }
+    .font-card:nth-child(20) { animation-delay: 0.57s; }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+  ============================================================ -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo">Font<span>ora</span></a>
+      <span class="header-tag">Unicode Font Generator</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       MAIN CONTENT
+  ============================================================ -->
+  <main>
+    <div class="page-wrap">
+
+      <!-- HERO -->
+      <section class="hero">
+        <span class="hero-eyebrow">Free · Instant · No Sign-up</span>
+        <h1>Stylish text for every platform</h1>
+        <p>Type anything and get it instantly transformed into hundreds of Unicode font styles. Copy and paste to any social media.</p>
+      </section>
+
+      <!-- INPUT -->
+      <section class="input-section">
+        <label class="input-label" for="fontInput">Enter your text</label>
+        <div class="input-wrap">
+          <input
+            type="text"
+            id="fontInput"
+            class="main-input"
+            placeholder="e.g. Hello World"
+            maxlength="120"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="input-clear" id="clearBtn" aria-label="Clear text">&#x2715;</button>
+        </div>
+
+        <!-- FILTER TABS -->
+        <div class="filter-row" id="filterRow">
+          <button class="filter-btn active" data-filter="all">All styles</button>
+          <button class="filter-btn" data-filter="bold">Bold</button>
+          <button class="filter-btn" data-filter="italic">Italic</button>
+          <button class="filter-btn" data-filter="cursive">Cursive</button>
+          <button class="filter-btn" data-filter="gothic">Gothic</button>
+          <button class="filter-btn" data-filter="mono">Mono</button>
+          <button class="filter-btn" data-filter="decorative">Decorative</button>
+        </div>
+      </section>
+
+      <!-- RESULTS HEADER -->
+      <div class="results-header">
+        <span class="results-title">Font styles</span>
+        <span class="results-count" id="resultsCount">—</span>
+      </div>
+
+      <!-- FONTS GRID -->
+      <div class="fonts-grid" id="fontsGrid">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- EMPTY STATE (shown until user types) -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">Aa</div>
+        <div class="empty-text">Start typing above to generate font styles</div>
+      </div>
+
+      <!-- PLATFORMS STRIP -->
+      <div class="platforms-strip">
+        <div class="platforms-label">Works on every platform</div>
+        <div class="platforms-list">
+          <span class="platform-chip">Instagram</span>
+          <span class="platform-chip">TikTok</span>
+          <span class="platform-chip">Facebook</span>
+          <span class="platform-chip">X · Twitter</span>
+          <span class="platform-chip">Discord</span>
+          <span class="platform-chip">WhatsApp</span>
+          <span class="platform-chip">YouTube</span>
+          <span class="platform-chip">Twitch</span>
+          <span class="platform-chip">LinkedIn</span>
+        </div>
+      </div>
+
+    </div><!-- /page-wrap -->
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy"><strong>Fontora</strong> — Unicode font generator for social media</span>
+      <!-- <div class="footer-links">
+        <a href="#">How it works</a>
+        <a href="#">Privacy</a>
+      </div> -->
+      <!-- copy -->
+      <span class="footer-copy">© 2026 Fontora. All rights reserved.</span>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       JAVASCRIPT — FONT ENGINE
+  ============================================================ -->
+  <script>
+    /* ----------------------------------------------------------
+       UNICODE FONT MAPS
+       Each entry: { id, name, category, convert(str) => str }
+    ---------------------------------------------------------- */
+    const FONTS = [
+
+      /* ── BOLD ── */
+      {
+        id: 'bold-serif', name: 'Bold Serif', category: 'bold',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 119743);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 119737);
+          if (n >= 48 && n <= 57)  return String.fromCodePoint(n + 120764);
+          return c;
+        }).join('')
+      },
+      {
+        id: 'bold-sans', name: 'Bold Sans-Serif', category: 'bold',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 120211);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 120205);
+          if (n >= 48 && n <= 57)  return String.fromCodePoint(n + 120812);
+          return c;
+        }).join('')
+      },
+
+      /* ── ITALIC ── */
+      {
+        id: 'italic-serif', name: 'Italic Serif', category: 'italic',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n === 104) return '\u210E'; // special case: h
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 119795);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 119789);
+          return c;
+        }).join('')
+      },
+      {
+        id: 'bold-italic-serif', name: 'Bold Italic', category: 'italic',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 119847);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 119841);
+          return c;
+        }).join('')
+      },
+      {
+        id: 'italic-sans', name: 'Italic Sans-Serif', category: 'italic',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 120263);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 120257);
+          return c;
+        }).join('')
+      },
+      {
+        id: 'bold-italic-sans', name: 'Bold Italic Sans', category: 'italic',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 120315);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 120309);
+          return c;
+        }).join('')
+      },
+
+      /* ── CURSIVE / SCRIPT ── */
+      {
+        id: 'script', name: 'Script', category: 'cursive',
+        convert: (s) => {
+          const map = {A:'\uD835\uDC9C',B:'\u212C',C:'\uD835\uDC9E',D:'\uD835\uDC9F',E:'\u2130',F:'\u2131',G:'\uD835\uDCA2',H:'\u210B',I:'\u2110',J:'\uD835\uDCA5',K:'\uD835\uDCA6',L:'\u2112',M:'\u2133',N:'\uD835\uDCA9',O:'\uD835\uDCAA',P:'\uD835\uDCAB',Q:'\uD835\uDCAC',R:'\u211B',S:'\uD835\uDCAE',T:'\uD835\uDCAF',U:'\uD835\uDCB0',V:'\uD835\uDCB1',W:'\uD835\uDCB2',X:'\uD835\uDCB3',Y:'\uD835\uDCB4',Z:'\uD835\uDCB5',a:'\uD835\uDCB6',b:'\uD835\uDCB7',c:'\uD835\uDCB8',d:'\uD835\uDCB9',e:'\u212F',f:'\uD835\uDCBB',g:'\u210A',h:'\uD835\uDCBD',i:'\uD835\uDCBE',j:'\uD835\uDCBF',k:'\uD835\uDCC0',l:'\uD835\uDCC1',m:'\uD835\uDCC2',n:'\uD835\uDCC3',o:'\u2134',p:'\uD835\uDCC5',q:'\uD835\uDCC6',r:'\uD835\uDCC7',s:'\uD835\uDCC8',t:'\uD835\uDCC9',u:'\uD835\uDCCA',v:'\uD835\uDCCB',w:'\uD835\uDCCC',x:'\uD835\uDCCD',y:'\uD835\uDCCE',z:'\uD835\uDCCF'};
+          return [...s].map(c => map[c] || c).join('');
+        }
+      },
+      {
+        id: 'cursive-bold', name: 'Bold Script', category: 'cursive',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 119899);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 119893);
+          return c;
+        }).join('')
+      },
+
+      /* ── GOTHIC / FRAKTUR ── */
+      {
+        id: 'gothic', name: 'Gothic (Fraktur)', category: 'gothic',
+        convert: (s) => {
+          const map = {A:'\uD835\uDD04',B:'\uD835\uDD05',C:'\u212D',D:'\uD835\uDD07',E:'\uD835\uDD08',F:'\uD835\uDD09',G:'\uD835\uDD0A',H:'\u210C',I:'\u2111',J:'\uD835\uDD0D',K:'\uD835\uDD0E',L:'\uD835\uDD0F',M:'\uD835\uDD10',N:'\uD835\uDD11',O:'\uD835\uDD12',P:'\uD835\uDD13',Q:'\uD835\uDD14',R:'\u211C',S:'\uD835\uDD16',T:'\uD835\uDD17',U:'\uD835\uDD18',V:'\uD835\uDD19',W:'\uD835\uDD1A',X:'\uD835\uDD1B',Y:'\uD835\uDD1C',Z:'\u2128',a:'\uD835\uDD1E',b:'\uD835\uDD1F',c:'\uD835\uDD20',d:'\uD835\uDD21',e:'\uD835\uDD22',f:'\uD835\uDD23',g:'\uD835\uDD24',h:'\uD835\uDD25',i:'\uD835\uDD26',j:'\uD835\uDD27',k:'\uD835\uDD28',l:'\uD835\uDD29',m:'\uD835\uDD2A',n:'\uD835\uDD2B',o:'\uD835\uDD2C',p:'\uD835\uDD2D',q:'\uD835\uDD2E',r:'\uD835\uDD2F',s:'\uD835\uDD30',t:'\uD835\uDD31',u:'\uD835\uDD32',v:'\uD835\uDD33',w:'\uD835\uDD34',x:'\uD835\uDD35',y:'\uD835\uDD36',z:'\uD835\uDD37'};
+          return [...s].map(c => map[c] || c).join('');
+        }
+      },
+      {
+        id: 'gothic-bold', name: 'Bold Gothic', category: 'gothic',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 120107);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 120101);
+          return c;
+        }).join('')
+      },
+
+      /* ── MONO / TYPEWRITER ── */
+      {
+        id: 'mono', name: 'Monospace', category: 'mono',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 120367);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 120361);
+          if (n >= 48 && n <= 57)  return String.fromCodePoint(n + 120822);
+          return c;
+        }).join('')
+      },
+
+      /* ── DOUBLE-STRUCK ── */
+      {
+        id: 'double-struck', name: 'Double Struck', category: 'bold',
+        convert: (s) => {
+          const map = {A:'\uD835\uDD38',B:'\uD835\uDD39',C:'\u2102',D:'\uD835\uDD3B',E:'\uD835\uDD3C',F:'\uD835\uDD3D',G:'\uD835\uDD3E',H:'\u210D',I:'\uD835\uDD40',J:'\uD835\uDD41',K:'\uD835\uDD42',L:'\uD835\uDD43',M:'\uD835\uDD44',N:'\u2115',O:'\uD835\uDD46',P:'\u2119',Q:'\u211A',R:'\u211D',S:'\uD835\uDD4A',T:'\uD835\uDD4B',U:'\uD835\uDD4C',V:'\uD835\uDD4D',W:'\uD835\uDD4E',X:'\uD835\uDD4F',Y:'\uD835\uDD50',Z:'\u2124',a:'\uD835\uDD52',b:'\uD835\uDD53',c:'\uD835\uDD54',d:'\uD835\uDD55',e:'\uD835\uDD56',f:'\uD835\uDD57',g:'\uD835\uDD58',h:'\uD835\uDD59',i:'\uD835\uDD5A',j:'\uD835\uDD5B',k:'\uD835\uDD5C',l:'\uD835\uDD5D',m:'\uD835\uDD5E',n:'\uD835\uDD5F',o:'\uD835\uDD60',p:'\uD835\uDD61',q:'\uD835\uDD62',r:'\uD835\uDD63',s:'\uD835\uDD64',t:'\uD835\uDD65',u:'\uD835\uDD66',v:'\uD835\uDD67',w:'\uD835\uDD68',x:'\uD835\uDD69',y:'\uD835\uDD6A',z:'\uD835\uDD6B'};
+          return [...s].map(c => map[c] || c).join('');
+        }
+      },
+
+      /* ── DECORATIVE ── */
+      {
+        id: 'circled', name: 'Circled', category: 'decorative',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 9333);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 9327);
+          if (n >= 48 && n <= 57)  return n === 48 ? '\u24EA' : String.fromCodePoint(n + 9311);
+          return c;
+        }).join('')
+      },
+      {
+        id: 'squared', name: 'Squared', category: 'decorative',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 127215);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 127215 - 32);
+          return c;
+        }).join('')
+      },
+      {
+        id: 'small-caps', name: 'Small Caps', category: 'decorative',
+        convert: (s) => {
+          const map = {a:'ᴀ',b:'ʙ',c:'ᴄ',d:'ᴅ',e:'ᴇ',f:'ꜰ',g:'ɢ',h:'ʜ',i:'ɪ',j:'ᴊ',k:'ᴋ',l:'ʟ',m:'ᴍ',n:'ɴ',o:'ᴏ',p:'ᴘ',q:'ǫ',r:'ʀ',s:'s',t:'ᴛ',u:'ᴜ',v:'ᴠ',w:'ᴡ',x:'x',y:'ʏ',z:'ᴢ'};
+          return [...s].map(c => map[c.toLowerCase()] || c).join('');
+        }
+      },
+      {
+        id: 'superscript', name: 'Superscript', category: 'decorative',
+        convert: (s) => {
+          const map = {a:'ᵃ',b:'ᵇ',c:'ᶜ',d:'ᵈ',e:'ᵉ',f:'ᶠ',g:'ᵍ',h:'ʰ',i:'ⁱ',j:'ʲ',k:'ᵏ',l:'ˡ',m:'ᵐ',n:'ⁿ',o:'ᵒ',p:'ᵖ',q:'ᵠ',r:'ʳ',s:'ˢ',t:'ᵗ',u:'ᵘ',v:'ᵛ',w:'ʷ',x:'ˣ',y:'ʸ',z:'ᶻ',A:'ᴬ',B:'ᴮ',C:'ᶜ',D:'ᴰ',E:'ᴱ',F:'ᶠ',G:'ᴳ',H:'ᴴ',I:'ᴵ',J:'ᴶ',K:'ᴷ',L:'ᴸ',M:'ᴹ',N:'ᴺ',O:'ᴼ',P:'ᴾ',Q:'Q',R:'ᴿ',S:'ˢ',T:'ᵀ',U:'ᵁ',V:'ⱽ',W:'ᵂ',X:'ˣ',Y:'ʸ',Z:'ᶻ','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+          return [...s].map(c => map[c] || c).join('');
+        }
+      },
+      {
+        id: 'upsidedown', name: 'Upside Down', category: 'decorative',
+        convert: (s) => {
+          const map = {a:'ɐ',b:'q',c:'ɔ',d:'p',e:'ǝ',f:'ɟ',g:'ƃ',h:'ɥ',i:'ᴉ',j:'ɾ',k:'ʞ',l:'l',m:'ɯ',n:'u',o:'o',p:'d',q:'b',r:'ɹ',s:'s',t:'ʇ',u:'n',v:'ʌ',w:'ʍ',x:'x',y:'ʎ',z:'z',A:'∀',B:'q',C:'Ɔ',D:'p',E:'Ǝ',F:'Ⅎ',G:'פ',H:'H',I:'I',J:'ɾ',K:'ʞ',L:'˥',M:'W',N:'N',O:'O',P:'Ԁ',Q:'Q',R:'ɹ',S:'S',T:'┴',U:'∩',V:'Λ',W:'M',X:'X',Y:'⅄',Z:'Z','0':'0','1':'Ɩ','2':'ᄅ','3':'Ɛ','4':'ᔭ','5':'ϛ','6':'9','7':'L','8':'8','9':'6',' ':' '};
+          return [...s].map(c => map[c] || c).reverse().join('');
+        }
+      },
+      {
+        id: 'fullwidth', name: 'Full Width', category: 'decorative',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 33 && n <= 126) return String.fromCodePoint(n + 65248);
+          if (n === 32) return '\u3000';
+          return c;
+        }).join('')
+      },
+      {
+        id: 'strikethrough', name: 'Strikethrough', category: 'decorative',
+        convert: (s) => [...s].map(c => c === ' ' ? ' ' : c + '\u0336').join('')
+      },
+      {
+        id: 'underline', name: 'Underline', category: 'decorative',
+        convert: (s) => [...s].map(c => c === ' ' ? ' ' : c + '\u0332').join('')
+      },
+      {
+        id: 'wavy-underline', name: 'Wavy Underline', category: 'decorative',
+        convert: (s) => [...s].map(c => c === ' ' ? ' ' : c + '\u0330').join('')
+      },
+      {
+        id: 'currency-ify', name: 'Currency Style', category: 'decorative',
+        convert: (s) => {
+          const map = {a:'₳',b:'฿',c:'¢',d:'₫',e:'€',f:'₣',g:'₲',h:'Ħ',i:'ł',j:'J',k:'₭',l:'Ł',m:'₥',n:'₦',o:'ø',p:'₱',q:'Q',r:'Ɽ',s:'$',t:'₮',u:'∪',v:'V',w:'₩',x:'Ж',y:'¥',z:'Z',A:'₳',B:'฿',C:'¢',D:'₫',E:'€',F:'₣',G:'₲',H:'Ħ',I:'ł',J:'J',K:'₭',L:'Ł',M:'₥',N:'₦',O:'ø',P:'₱',Q:'Q',R:'Ɽ',S:'$',T:'₮',U:'∪',V:'V',W:'₩',X:'Ж',Y:'¥',Z:'Z'};
+          return [...s].map(c => map[c] || c).join('');
+        }
+      },
+      {
+        id: 'bubble', name: 'Bubble Letters', category: 'decorative',
+        convert: (s) => [...s].map(c => {
+          const n = c.codePointAt(0);
+          if (n >= 65 && n <= 90)  return String.fromCodePoint(n + 9398 - 65);
+          if (n >= 97 && n <= 122) return String.fromCodePoint(n + 9424 - 97);
+          if (n >= 49 && n <= 57)  return String.fromCodePoint(n + 9311 - 48);
+          if (n === 48) return '\u24EA';
+          return c;
+        }).join('')
+      },
+    ];
+
+
+    /* ----------------------------------------------------------
+       STATE
+    ---------------------------------------------------------- */
+    let currentFilter = 'all';
+    let currentText   = '';
+
+
+    /* ----------------------------------------------------------
+       DOM REFERENCES
+    ---------------------------------------------------------- */
+    const input       = document.getElementById('fontInput');
+    const clearBtn    = document.getElementById('clearBtn');
+    const fontsGrid   = document.getElementById('fontsGrid');
+    const emptyState  = document.getElementById('emptyState');
+    const countEl     = document.getElementById('resultsCount');
+    const filterBtns  = document.querySelectorAll('.filter-btn');
+
+
+    /* ----------------------------------------------------------
+       RENDER
+    ---------------------------------------------------------- */
+    function render() {
+      const text = input.value.trim();
+
+      /* toggle clear button */
+      clearBtn.classList.toggle('visible', input.value.length > 0);
+
+      if (!text) {
+        fontsGrid.innerHTML  = '';
+        emptyState.style.display = 'block';
+        countEl.textContent  = '—';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      const filtered = FONTS.filter(f =>
+        currentFilter === 'all' || f.category === currentFilter
+      );
+
+      countEl.textContent = filtered.length + ' style' + (filtered.length !== 1 ? 's' : '');
+
+      /* Re-render cards */
+      fontsGrid.innerHTML = filtered.map(font => {
+        const converted = font.convert(text);
+        return `
+          <div class="font-card">
+            <div class="font-card-left">
+              <div class="font-style-name">${font.name}</div>
+              <div class="font-output" id="out-${font.id}">${converted}</div>
+            </div>
+            <div class="font-card-right">
+              <button
+                class="copy-btn"
+                onclick="copyFont('${font.id}', this)"
+                aria-label="Copy ${font.name} style"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="9" y="9" width="13" height="13" rx="2"/>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+
+    /* ----------------------------------------------------------
+       COPY
+    ---------------------------------------------------------- */
+    function copyFont(fontId, btn) {
+      const el = document.getElementById('out-' + fontId);
+      if (!el) return;
+
+      const text = el.textContent;
+
+      navigator.clipboard.writeText(text).then(() => {
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>Copied</span>
+        `;
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span>Copy</span>
+          `;
+        }, 2000);
+      }).catch(() => {
+        /* Fallback for older browsers */
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        document.execCommand('copy');
+        sel.removeAllRanges();
+      });
+    }
+
+
+    /* ----------------------------------------------------------
+       EVENTS
+    ---------------------------------------------------------- */
+    input.addEventListener('input', render);
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      input.focus();
+      render();
+    });
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+
+    /* ----------------------------------------------------------
+       INIT
+    ---------------------------------------------------------- */
+    render();
+
+
+    // Disable right-click on the entire webpage
+    window.addEventListener('contextmenu', function (e) {
+      e.preventDefault();
+    }, false);
+
+  </script>
+
+
+</body>
+</html>
