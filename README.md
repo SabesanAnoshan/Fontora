@@ -11,7 +11,7 @@ mind, making it suitable for both users and developers.
 
 ## ✨ Features
 
--   🎨 100+ Stylish Unicode Font Styles
+-   🎨 20+ Stylish Unicode Font Styles
 -   ⚡ Real-time Text Conversion
 -   📋 One-Click Copy to Clipboard
 -   🔍 Search & Filter Font Styles
@@ -41,7 +41,6 @@ mind, making it suitable for both users and developers.
 -   HTML5
 -   CSS3 / Tailwind CSS
 -   JavaScript / TypeScript
--   React / Next.js
 -   Unicode Character Mapping
 -   Clipboard API
 
